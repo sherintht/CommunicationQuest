@@ -1,0 +1,24 @@
+COMMUNICATION QUEST V3 – STABLE GAME VERSION
+
+Replace your old index.html, game.js and style.css with this package.
+
+RUN:
+1. Open VS Code in D:\SJCET\CommunicationQuest
+2. Start:
+   python -m http.server 8080
+3. Open:
+   http://localhost:8080
+
+GAME:
+- Enter Sampling Valley first.
+- Name/roll appear only in a small mission popup.
+- Explore a visible scrolling valley.
+- 20 sampling/quantization missions.
+- Monsters, score, lives and castle.
+- Mobile controls included.
+
+RESULT:
+Google Form is available at the end:
+https://docs.google.com/forms/d/e/1FAIpQLSfFGzuXPdOCvgnELu4k9uds_at8dv8hEFEkWyOQ2qmUTgq6cQ/viewform
+
+No Apps Script or API key required.

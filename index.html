@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Communication Quest</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- START -->
+<section id="start" class="screen active">
+  <div class="stars"></div>
+  <div class="hero">
+    <div class="kicker">⚡ S5 ECE • LEARNING ADVENTURE</div>
+    <div class="logo">📡</div>
+    <h1>COMMUNICATION<br><span>QUEST</span></h1>
+    <p class="tagline">Restore the Signal • Defeat the Noise • Master Communication</p>
+    <div class="story">
+      <div class="story-icon">👑</div>
+      <div><b>THE SIGNAL KINGDOM IS IN DANGER!</b><small>The Noise King has corrupted the communication network.</small></div>
+    </div>
+    <div class="actions">
+      <button id="enter" class="play">▶ ENTER SAMPLING VALLEY</button>
+      <button id="guide" class="guide">❔ HOW TO PLAY</button>
+    </div>
+    <div class="features"><span>🎯 20 Missions</span><span>👾 Monsters</span><span>🧠 Learn & Solve</span><span>🏰 Castle</span></div>
+    <div class="student-popup hidden" id="studentPopup">
+      <div class="popup">
+        <button id="closePopup" class="close">✕</button>
+        <div class="popup-icon">🧑‍🔬</div>
+        <h2>READY, SCIENTIST?</h2>
+        <p>Enter your details and launch the mission.</p>
+        <input id="name" placeholder="Student Name" maxlength="60">
+        <input id="roll" placeholder="Roll / Register Number" maxlength="30">
+        <button id="launch" class="play">🚀 LAUNCH MISSION</button>
+      </div>
+    </div>
+    <small class="credit">Analog & Digital Communication • S5 ECE</small>
+  </div>
+</section>
+
+<!-- GUIDE -->
+<div id="guideModal" class="overlay hidden">
+ <div class="guideBox">
+  <button id="closeGuide" class="close">✕</button>
+  <div class="popup-icon">🎮</div><h2>HOW TO PLAY</h2>
+  <div class="controls"><b>⬅️ A / ←<small>Move</small></b><b>➡️ D / →<small>Move</small></b><b>⬆️ SPACE<small>Jump</small></b><b>⚡ X<small>Attack</small></b></div>
+  <ol><li>Move through Sampling Valley.</li><li>Reach the glowing 📡 missions.</li><li>Read the concept and solve the challenge.</li><li>Defeat 👾 monsters for bonus points.</li><li>Clear all 20 missions and reach 🏰.</li></ol>
+ </div>
+</div>
+
+<!-- GAME -->
+<section id="game" class="screen">
+ <header class="hud">
+  <b>📡 SAMPLING VALLEY</b>
+  <span>👤 <i id="hudName">Scientist</i></span>
+  <span>⭐ <i id="hudScore">0</i></span>
+  <span>❤️ <i id="hudLives">3</i></span>
+  <span>📡 <i id="hudProgress">0/20</i></span>
+ </header>
+ <div class="bar"><div id="barFill"></div></div>
+ <div id="viewport">
+   <div id="world">
+     <div class="sky sun"></div>
+     <div class="mountain m1"></div><div class="mountain m2"></div><div class="mountain m3"></div>
+     <div class="road"></div>
+     <div id="objects"></div>
+     <div id="castle">🚩<strong>🏰</strong><small>SIGNAL CASTLE</small><em id="castleText">🔒 20 missions required</em></div>
+   </div>
+   <div id="player"><div class="tag" id="playerTag">Scientist</div>🧑‍🔬</div>
+   <div id="toast" class="hidden"></div>
+   <div id="question" class="hidden">
+     <div class="qtop"><b id="qnum">MISSION 1/20</b><button id="qclose">✕</button></div>
+     <h2 id="qtitle"></h2><div id="concept"></div><h3 id="qtext"></h3><div id="answers"></div><p id="feedback"></p>
+     <button id="continue" class="continue hidden">⚡ RESTORE SIGNAL & CONTINUE</button>
+   </div>
+ </div>
+ <div class="mobile"><button data-k="left">⬅️</button><button data-k="jump">⬆️</button><button data-k="right">➡️</button><button data-k="attack">⚡</button></div>
+ <footer>A/← MOVE &nbsp; D/→ MOVE &nbsp; SPACE JUMP &nbsp; X ATTACK <button id="gameHelp">?</button></footer>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="screen">
+ <div class="resultBox">
+  <div class="big">🏆</div><div class="kicker">MISSION REPORT</div>
+  <h1 id="resultTitle">QUEST COMPLETE!</h1><p id="resultMsg"></p>
+  <div class="stats">
+   <div><small>SCIENTIST</small><b id="rName">-</b></div><div><small>ROLL NO.</small><b id="rRoll">-</b></div>
+   <div><small>SCORE</small><b id="rScore">0</b></div><div><small>MISSIONS</small><b id="rMissions">0/20</b></div>
+   <div><small>LIVES</small><b id="rLives">0</b></div><div><small>STATUS</small><b id="rStatus">-</b></div>
+  </div>
+  <div class="submit"><h3>📤 SEND MISSION REPORT</h3><p>Copy your result, open the teacher's Google Form and submit it.</p><button id="copy" class="continue">📋 COPY RESULT</button><button id="form" class="form">📝 OPEN RESULT FORM</button><small id="copied"></small></div>
+  <button id="again" class="guide">🔄 PLAY AGAIN</button>
+ </div>
+</section>
+<script src="game.js"></script>
+</body>
+</html>
