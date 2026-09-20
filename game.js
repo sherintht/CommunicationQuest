@@ -70,3 +70,256 @@ window.addEventListener("keydown",e=>{if(["ArrowLeft","ArrowRight","ArrowUp","Sp
 window.addEventListener("keyup",e=>{if(e.code==="ArrowLeft"||e.code==="KeyA")s.left=false;if(e.code==="ArrowRight"||e.code==="KeyD")s.right=false});
 document.querySelectorAll(".mobile button").forEach(b=>{let k=b.dataset.k;let down=e=>{e.preventDefault();if(k==="left")s.left=true;if(k==="right")s.right=true;if(k==="jump")jump();if(k==="attack")attack()};let up=e=>{e.preventDefault();if(k==="left")s.left=false;if(k==="right")s.right=false};b.addEventListener("touchstart",down,{passive:false});b.addEventListener("touchend",up,{passive:false});b.addEventListener("mousedown",down);b.addEventListener("mouseup",up);b.addEventListener("mouseleave",up)});
 window.addEventListener("resize",()=>{if(s.running)player()});
+/* =========================================================
+   COMMUNICATION QUEST - SOUND ENGINE
+   Web Audio API
+   No external MP3 files required
+   ========================================================= */
+
+const CQAudio = (() => {
+
+    let audioContext = null;
+    let masterGain = null;
+    let enabled = true;
+
+    function init() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)();
+
+            masterGain = audioContext.createGain();
+            masterGain.gain.value = 0.18;
+            masterGain.connect(audioContext.destination);
+        }
+
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+    }
+
+    function setEnabled(value) {
+        enabled = value;
+
+        if (masterGain) {
+            masterGain.gain.value = enabled ? 0.18 : 0;
+        }
+
+        updateButton();
+    }
+
+    function toggle() {
+        init();
+        setEnabled(!enabled);
+    }
+
+    function tone(frequency, duration, type = "sine",
+                  volume = 0.3, delay = 0) {
+
+        if (!enabled) return;
+
+        init();
+
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(
+            frequency,
+            audioContext.currentTime + delay
+        );
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            audioContext.currentTime + delay
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            volume,
+            audioContext.currentTime + delay + 0.01
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioContext.currentTime + delay + duration
+        );
+
+        oscillator.connect(gain);
+        gain.connect(masterGain);
+
+        oscillator.start(audioContext.currentTime + delay);
+        oscillator.stop(
+            audioContext.currentTime + delay + duration + 0.03
+        );
+    }
+
+    /* =========================
+       GAME SOUNDS
+       ========================= */
+
+    function start() {
+        init();
+
+        tone(440, 0.12, "sine", 0.25);
+        tone(660, 0.12, "sine", 0.25, 0.10);
+        tone(880, 0.20, "sine", 0.25, 0.20);
+    }
+
+    function missionOpen() {
+        tone(330, 0.12, "triangle", 0.20);
+        tone(494, 0.18, "triangle", 0.20, 0.12);
+    }
+
+    function correct() {
+        tone(523, 0.10, "sine", 0.28);
+        tone(659, 0.10, "sine", 0.28, 0.08);
+        tone(784, 0.18, "sine", 0.28, 0.16);
+    }
+
+    function wrong() {
+        tone(220, 0.16, "sawtooth", 0.20);
+        tone(165, 0.25, "sawtooth", 0.20, 0.12);
+    }
+
+    function attack() {
+        tone(900, 0.05, "square", 0.15);
+        tone(500, 0.08, "square", 0.12, 0.04);
+    }
+
+    function monsterDefeated() {
+        tone(180, 0.08, "square", 0.20);
+        tone(300, 0.08, "triangle", 0.20, 0.08);
+        tone(600, 0.16, "sine", 0.25, 0.16);
+    }
+
+    function lifeLost() {
+        tone(260, 0.12, "sawtooth", 0.18);
+        tone(180, 0.18, "sawtooth", 0.18, 0.10);
+        tone(120, 0.25, "sawtooth", 0.18, 0.20);
+    }
+
+    function castleUnlock() {
+        tone(392, 0.12, "triangle", 0.22);
+        tone(523, 0.12, "triangle", 0.22, 0.10);
+        tone(659, 0.12, "triangle", 0.22, 0.20);
+        tone(784, 0.25, "triangle", 0.25, 0.30);
+    }
+
+    function missionComplete() {
+        tone(523, 0.15, "sine", 0.25);
+        tone(659, 0.15, "sine", 0.25, 0.12);
+        tone(784, 0.15, "sine", 0.25, 0.24);
+        tone(1047, 0.35, "sine", 0.30, 0.36);
+    }
+
+    function gameOver() {
+        tone(392, 0.18, "triangle", 0.20);
+        tone(330, 0.18, "triangle", 0.20, 0.15);
+        tone(262, 0.30, "triangle", 0.20, 0.30);
+    }
+
+    /* =========================
+       SOUND BUTTON
+       ========================= */
+
+    function createButton() {
+
+        if (document.getElementById("cqSoundButton")) {
+            return;
+        }
+
+        const button = document.createElement("button");
+
+        button.id = "cqSoundButton";
+        button.type = "button";
+        button.innerHTML = "🔊";
+        button.title = "Toggle Sound";
+
+        button.style.position = "fixed";
+        button.style.top = "12px";
+        button.style.right = "12px";
+        button.style.zIndex = "99999";
+
+        button.style.width = "44px";
+        button.style.height = "44px";
+
+        button.style.border = "2px solid rgba(255,255,255,0.5)";
+        button.style.borderRadius = "50%";
+
+        button.style.background =
+            "rgba(15,23,42,0.85)";
+
+        button.style.color = "white";
+        button.style.fontSize = "20px";
+        button.style.cursor = "pointer";
+
+        button.style.backdropFilter = "blur(8px)";
+
+        button.addEventListener("click", function(event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            init();
+            toggle();
+        });
+
+        document.body.appendChild(button);
+    }
+
+    function updateButton() {
+
+        const button =
+            document.getElementById("cqSoundButton");
+
+        if (!button) return;
+
+        button.innerHTML = enabled ? "🔊" : "🔇";
+
+        button.style.opacity =
+            enabled ? "1" : "0.65";
+    }
+
+    /* =========================
+       PUBLIC API
+       ========================= */
+
+    return {
+        init,
+        start,
+        missionOpen,
+        correct,
+        wrong,
+        attack,
+        monsterDefeated,
+        lifeLost,
+        castleUnlock,
+        missionComplete,
+        gameOver,
+        toggle,
+        createButton
+    };
+
+})();
+
+
+/* =========================================================
+   INITIALIZE SOUND BUTTON
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    CQAudio.createButton();
+
+});
+
+
+/* =========================================================
+   INITIALIZE AUDIO AFTER FIRST USER INTERACTION
+   Required by mobile browsers
+   ========================================================= */
+
+document.addEventListener("pointerdown", () => {
+
+    CQAudio.init();
+
+}, { once: true });
