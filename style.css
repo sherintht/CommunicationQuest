@@ -6,3 +6,40 @@
 
 @keyframes pulse{50%{transform:scale(1.14)}}@keyframes bob{to{transform:translateY(-8px)}}@keyframes dead{to{transform:translateY(-30px) scale(.1);opacity:0}}@keyframes float{50%{transform:translateY(-7px)}}@keyframes stars{to{background-position:70px 70px}}
 @media(max-width:760px){.hero h1{font-size:45px}.logo{width:75px;height:75px;font-size:43px}.tagline{font-size:14px}.story{font-size:12px}.features{gap:9px;font-size:10px}.hud{gap:7px}.hud b{display:none}.hud span{font-size:11px}.mobile{display:flex;justify-content:center;gap:10px;padding:7px;background:#081626}.mobile button{width:58px;height:47px;border-radius:12px;background:#1c344c;color:#fff;font-size:22px;border:1px solid #385a76}footer{height:25px}footer{font-size:0}footer:before{content:"🎮 Explore • Learn • Solve • Conquer";font-size:10px}}
+/* =========================================
+   COMMUNICATION QUEST MOBILE MISSION PANEL
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .mission-modal,
+    .question-modal,
+    .modal-content,
+    .mission-content {
+
+        max-height: 82vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+
+    }
+
+    .mission-modal::-webkit-scrollbar,
+    .question-modal::-webkit-scrollbar,
+    .modal-content::-webkit-scrollbar,
+    .mission-content::-webkit-scrollbar {
+
+        width: 5px;
+
+    }
+
+    .mission-modal::-webkit-scrollbar-thumb,
+    .question-modal::-webkit-scrollbar-thumb,
+    .modal-content::-webkit-scrollbar-thumb,
+    .mission-content::-webkit-scrollbar-thumb {
+
+        background: rgba(255,255,255,0.35);
+        border-radius: 10px;
+
+    }
+
+}
